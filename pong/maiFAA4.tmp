@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3 uid="uid://qjsmwtd3baek"]
+
+[ext_resource type="PackedScene" uid="uid://dj4tqbxw500xw" path="res://paddle.tscn" id="1_k4io3"]
+[ext_resource type="PackedScene" uid="uid://c8gd5xiscrvo0" path="res://ball.tscn" id="2_2e6hr"]
+[ext_resource type="Script" path="res://paddle.gd" id="2_m8hmg"]
+[ext_resource type="Script" path="res://ball.gd" id="4_a5yla"]
+[ext_resource type="Script" path="res://score_signal.gd" id="5_0y846"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rqhqt"]
+font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_75va1"]
+font_size = 40
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_874i7"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_6os1p"]
+
+[node name="Main" type="Node"]
+
+[node name="Paddle1" parent="." instance=ExtResource("1_k4io3")]
+position = Vector2(20, 100)
+scale = Vector2(10, 10)
+script = ExtResource("2_m8hmg")
+
+[node name="Paddle2" parent="." instance=ExtResource("1_k4io3")]
+position = Vector2(1150, 100)
+scale = Vector2(10, 10)
+script = ExtResource("2_m8hmg")
+
+[node name="Ball" parent="." instance=ExtResource("2_2e6hr")]
+floor_constant_speed = true
+platform_on_leave = 0
+script = ExtResource("4_a5yla")
+
+[node name="scoreSignal" type="Node2D" parent="Ball"]
+script = ExtResource("5_0y846")
+
+[node name="Score1" type="Label" parent="."]
+offset_left = 192.0
+offset_top = 32.0
+offset_right = 232.0
+offset_bottom = 55.0
+size_flags_horizontal = 4
+text = "0
+"
+label_settings = SubResource("LabelSettings_rqhqt")
+horizontal_alignment = 1
+
+[node name="Score2" type="Label" parent="."]
+offset_left = 928.0
+offset_top = 32.0
+offset_right = 968.0
+offset_bottom = 87.0
+text = "0
+"
+label_settings = SubResource("LabelSettings_75va1")
+horizontal_alignment = 1
+
+[node name="TopWall" type="StaticBody2D" parent="."]
+position = Vector2(0, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall"]
+shape = SubResource("WorldBoundaryShape2D_874i7")
+
+[node name="BottomWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
+rotation = -3.14159
+shape = SubResource("WorldBoundaryShape2D_6os1p")

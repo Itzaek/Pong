@@ -1,0 +1,99 @@
+[gd_scene load_steps=17 format=3 uid="uid://qjsmwtd3baek"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_itift"]
+[ext_resource type="PackedScene" uid="uid://dj4tqbxw500xw" path="res://paddle.tscn" id="1_k4io3"]
+[ext_resource type="PackedScene" uid="uid://c8gd5xiscrvo0" path="res://ball.tscn" id="2_2e6hr"]
+[ext_resource type="Script" path="res://paddle.gd" id="2_m8hmg"]
+[ext_resource type="Script" path="res://ball.gd" id="4_a5yla"]
+[ext_resource type="Script" path="res://score_1.gd" id="5_8dtnj"]
+[ext_resource type="FontFile" uid="uid://xo2u02ienlmf" path="res://bit5x3.ttf" id="6_8kj7i"]
+[ext_resource type="AudioStream" uid="uid://c728v1n44a2o0" path="res://sfx/paddle_hit.wav" id="6_kaaqx"]
+[ext_resource type="Script" path="res://score_2.gd" id="6_mth2w"]
+[ext_resource type="AudioStream" uid="uid://byqksjx8p7bmf" path="res://sfx/goal.wav" id="7_1kipw"]
+[ext_resource type="AudioStream" uid="uid://c5lrtq6uolbu1" path="res://sfx/wall_hit.wav" id="8_ne2rb"]
+[ext_resource type="Texture2D" uid="uid://bmos5v0hgkuau" path="res://assets/separator.png" id="12_k2l3g"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rqhqt"]
+font = ExtResource("6_8kj7i")
+font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_75va1"]
+font = ExtResource("6_8kj7i")
+font_size = 20
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_874i7"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_6os1p"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_itift")
+
+[node name="Paddle1" parent="." instance=ExtResource("1_k4io3")]
+position = Vector2(20, 100)
+script = ExtResource("2_m8hmg")
+
+[node name="Paddle2" parent="." instance=ExtResource("1_k4io3")]
+position = Vector2(280, 100)
+script = ExtResource("2_m8hmg")
+
+[node name="Ball" parent="." instance=ExtResource("2_2e6hr")]
+floor_constant_speed = true
+platform_on_leave = 0
+script = ExtResource("4_a5yla")
+
+[node name="PaddleHit" type="AudioStreamPlayer2D" parent="Ball"]
+stream = ExtResource("6_kaaqx")
+
+[node name="Goal" type="AudioStreamPlayer" parent="Ball"]
+stream = ExtResource("7_1kipw")
+volume_db = -6.0
+
+[node name="WallHit" type="AudioStreamPlayer" parent="Ball"]
+stream = ExtResource("8_ne2rb")
+
+[node name="Score1" type="Label" parent="."]
+offset_left = 75.0
+offset_top = 20.0
+offset_right = 87.0
+offset_bottom = 48.0
+size_flags_horizontal = 0
+text = "0
+"
+label_settings = SubResource("LabelSettings_rqhqt")
+horizontal_alignment = 1
+script = ExtResource("5_8dtnj")
+
+[node name="Score2" type="Label" parent="."]
+offset_left = 225.0
+offset_top = 20.0
+offset_right = 237.0
+offset_bottom = 48.0
+text = "0
+"
+label_settings = SubResource("LabelSettings_75va1")
+horizontal_alignment = 1
+script = ExtResource("6_mth2w")
+
+[node name="BottomWall" type="StaticBody2D" parent="."]
+position = Vector2(0, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
+shape = SubResource("WorldBoundaryShape2D_874i7")
+
+[node name="TopWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall"]
+rotation = -3.14159
+shape = SubResource("WorldBoundaryShape2D_6os1p")
+
+[node name="BallSpawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="Separator" type="Sprite2D" parent="."]
+position = Vector2(150, 200)
+texture = ExtResource("12_k2l3g")
+
+[connection signal="scoreSignal" from="Ball" to="Score1" method="_on_ball_score_signal"]
+[connection signal="scoreSignal" from="Ball" to="Score2" method="_on_ball_score_signal"]
+[connection signal="visibility_changed" from="Ball" to="." method="_on_ball_visibility_changed"]
+[connection signal="timeout" from="BallSpawnTimer" to="." method="_on_ball_spawn_timer_timeout"]
