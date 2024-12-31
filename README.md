@@ -7,7 +7,7 @@ There are two manually controlled players P1 and P2.
 The left paddles are controlled with w and s.
 The right paddles are controlled with up and down arrows.
 
-1. Download the exe (windows only, but I can create more exports)
+1. Download the exe (windows only, but I can create more exports) here: https://github.com/Itzaek/Pong/tree/main/pong/builds
 2. Run the exe
 
 # Improvements
